@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #007BFF;
+    padding: 20px;
+    color: white;
+}
+
+.search-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-categories {
+    display: flex;
+    gap: 10px;
+}
+
+.category-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.category-button.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.search-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#search-button {
+    background-color: #fff;
+    color: #007BFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #007BFF;
+    color: white;
+}
