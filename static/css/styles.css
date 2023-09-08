@@ -1,0 +1,216 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #c6dcf3;
+    background-image: url('https://c0.wallpaperflare.com/preview/541/963/805/bangladesh-dhaka-division-leaf-nature.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 20px;
+    color: white;
+    height: 30vh;
+}
+
+.search-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-categories {
+    display: flex;
+    gap: 10px;
+}
+
+.category-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.category-button.active {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.search-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#search-button {
+    background-color: #fff;
+    color: #007BFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+/* =========================== postioning of btn-group and input-group-t to center  ==============================*/
+
+.btn-group {
+    position: relative;
+    left: 0; /* Adjust as needed */
+    right: 0;
+    margin: auto;
+    top:40px;
+}
+.input-group-t {
+    position: absolute;
+    top: 90px; 
+}
+
+/* ============================= card-item styling for popular travel blog =============================== */
+
+.bg-card{
+    background-color:lightgoldenrodyellow;
+    
+}
+.img-card {
+    position: relative;
+  }
+  
+ .card .btn-more {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    background-color: #fff;
+    color: blue;
+  }
+
+.card .btn-money{
+    position: absolute;
+    bottom: 10px; 
+    left: 10px;     
+    color: purple;
+}
+
+.card .btn-love{
+    position: absolute;
+    bottom: 10px; 
+    right: 50px;
+}
+
+.btn-love {
+    color: red;
+}
+
+.card .btn-map{
+    position: absolute;
+    bottom: 10px; 
+    right: 10px; 
+}
+
+
+
+.img-card img{
+    height: 300px;
+    width: 100%;
+}
+
+.textstyle{
+    text-decoration: none;
+}
+
+
+.available{
+    text-align: end;
+}
+
+.input-border{
+    border-left: 0;
+}
+
+
+.details {
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+  }
+  
+  .fa-solid {
+    color: goldenrod;
+  }
+
+  .fa-check {
+    font-weight: bold;
+  }
+
+  .input.form-control {
+    background: #000;
+  }
+
+
+/* ===================== our pricing section ================================================ */
+
+#pricing {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Style the card titles and subtitles */
+.card-title {
+    color: #343a40; /* Dark text color */
+    font-size: 24px; /* Increase font size */
+    font-weight: bold;
+}
+
+.card-subtitle {
+    color: #6c757d; /* Subdued text color */
+    font-size: 18px; /* Slightly smaller font size */
+    margin-bottom: 20px; /* Add space between title and subtitle */
+}
+
+/* Style the card prices */
+.card-price {
+    color: #007bff; /* Blue price color */
+    font-size: 32px; /* Larger font size for price */
+    margin-top: 10px; /* Add space above price */
+}
+
+/* Style the card features list */
+ul.list-unstyled {
+    padding: 0; /* Remove default list padding */
+    margin-top: 20px; /* Add space between price and features */
+}
+
+ul.list-unstyled li {
+    color: #6c757d; /* Subdued text color */
+    font-size: 16px; /* Font size for features */
+    list-style-type: none; /* Remove bullets from list */
+    margin-bottom: 10px; /* Add space between list items */
+    
+}
+
+/* Style the "Get Started" buttons */
+.btn-primary {
+    background-color: #007bff; /* Blue button background */
+    border: none; /* Remove button border */
+    
+    transition: background-color 0.3s ease; /* Add a smooth hover effect */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Add a subtle shadow to the cards */
+.card {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
