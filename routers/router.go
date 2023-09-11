@@ -12,5 +12,7 @@ func init() {
 	// beego.Router("/hotel_search", &controllers.HotelSearchController{})
 	beego.Router("/searchHotels", &controllers.HotelSearchController{})
 	beego.Router("/searchRestaurants", &controllers.RestaurantSearchController{})
+	// beego.Router("/flights", &controllers.FlightController{}, "get:Index")
+	beego.Router("/flights/return", &controllers.FlightController{}, "get:Search")
 
 }
