@@ -1,4 +1,4 @@
-<section id="pricing" class="bg-light py-5">
+<section id="pricing" class=" py-5" style="background-color:rgb(230, 247, 255);">
     <div class="container">
         <h2 class="text-center mb-5 text-info">Choose Your Plan</h2>
         <div class="row">

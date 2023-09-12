@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Search Results</title>
-</head>
-<body>
-    <h1>Flight Search Results</h1>
+{{template "partials/header.tpl" .}}
+{{template "partials/nav.tpl" .}}
 
-    {{if .FlightResults}}
+    <h1 class="text-center">Flight Search Results</h1>
+
+    {{if .flightResults.Flights}}
         <ul>
-            {{range .FlightResults}}
+            {{range .flightResults.Flights}}
                 <li>
                     <strong>Flight ID:</strong> {{.id}}<br>
                     <strong>Departure Date:</strong> {{.data.departureDate}}<br>
@@ -24,7 +19,4 @@
     {{else}}
         <p>No flight results found.</p>
     {{end}}
-
-    
-</body>
-</html>
+{{template "partials/footer-lib.tpl" .}}

@@ -111,6 +111,16 @@ document.getElementById('search-button').addEventListener('click', function () {
         fetchFlightData().then(function (flightData) {
             updateCardItems(flightData);
         });
+        // window.location.href = '/flights/return';
+    }
+
+    else if (activeCategory === 'restaurants') {
+        // Perform the flight search and update the card-items with flight data
+        
+    }
+    else if (activeCategory === 'hotels') {
+        // Perform the flight search and update the card-items with flight data
+        
     }
 });
 
@@ -121,64 +131,83 @@ function fetchFlightData() {
     const locationTo = document.getElementById("location-to").value;
     const departureDate = document.getElementById("departure-date").value;
     const returnDate = document.getElementById("return-date").value;
-  
+
     // Construct the URL
-    const apiUrl = `/flights/return?locationFrom=${locationFrom}&locationTo=${locationTo}&departureDate=${departureDate}&returnDate=${returnDate}`;
-  
+    const apiUrl = `/flights/return?location_from=${locationFrom}&location_to=${locationTo}&departure_date=${departureDate}&return_date=${returnDate}&page=1&country_flag=us`;
+
     // Fetch flight data from the server
     return fetch(apiUrl)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-            return response.text(); // Read response as text
-        })
-        .then((data) => {
-            if (!data) {
-                console.error("Received empty JSON response");
+
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                return response.json(); // Parse the response as JSON
+            } else {
+                console.error("Received non-JSON response");
                 return []; // Return an empty array or handle this case as needed
             }
-            return JSON.parse(data); // Parse the JSON data
         })
         .catch((error) => {
             console.error("There was a problem with the fetch operation:", error);
         });
 }
-  
-  // Function to update flight search results in the DOM
-  function updateCardItems(flights) {
-    const flightList = document.getElementById("flightResults");
 
   
+  // Function to update flight search results in the DOM
+function updateCardItems(flights) {
+    const flightList = document.getElementById("flightResults");
+
     // Clear the existing flight list
-    flightList.innerHTML = "";
-  
+    while (flightList.firstChild) {
+        flightList.removeChild(flightList.firstChild);
+    }
+
     // Loop through the flight data and create card items
     flights.forEach((flight, index) => {
-      const cardItem = document.createElement("div");
-      cardItem.classList.add("card");
-      cardItem.innerHTML = `
-        <div class="card-header">
-          Flight ${index + 1}
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Flight Details</h5>
-          <p class="card-text">Flight Number: ${flight.flightNumber}</p>
-          <p class="card-text">Departure Time: ${flight.departuredAt}</p>
-          <p class="card-text">Arrival Time: ${flight.arrivedAt}</p>
-          <p class="card-text">Duration: ${flight.duration} seconds</p>
-          <p class="card-text">Origin: ${flight.origin.name}</p>
-          <p class="card-text">Destination: ${flight.destination.name}</p>
-          <p class="card-text">Operating Carrier: ${flight.operatingCarrier.name}</p>
-          <p class="card-text">Marketing Carrier: ${flight.marketingCarrier.name}</p>
-          <p class="card-text">Cabin Class: ${flight.cabinClassName}</p>
-          <p class="card-text">Number of Technical Stops: ${flight.numberOfTechnicalStops}</p>
-        </div>
-      `;
-  
-      flightList.appendChild(cardItem);
+        const cardItem = document.createElement("div");
+        cardItem.classList.add("card");
+
+        const cardHeader = document.createElement("div");
+        cardHeader.classList.add("card-header");
+        cardHeader.textContent = `Flight ${index + 1}`;
+
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body");
+
+        const cardTitle = document.createElement("h5");
+        cardTitle.classList.add("card-title");
+        cardTitle.textContent = "Flight Details";
+
+        const flightDetails = [
+            `Flight Number: ${flight.flightNumber}`,
+            `Departure Time: ${flight.departuredAt}`,
+            `Arrival Time: ${flight.arrivedAt}`,
+            `Duration: ${flight.duration} seconds`,
+            `Origin: ${flight.origin.name}`,
+            `Destination: ${flight.destination.name}`,
+            `Operating Carrier: ${flight.operatingCarrier.name}`,
+            `Marketing Carrier: ${flight.marketingCarrier.name}`,
+            `Cabin Class: ${flight.cabinClassName}`,
+            `Number of Technical Stops: ${flight.numberOfTechnicalStops}`
+        ];
+
+        flightDetails.forEach(detail => {
+            const paragraph = document.createElement("p");
+            paragraph.classList.add("card-text");
+            paragraph.textContent = detail;
+            cardBody.appendChild(paragraph);
+        });
+
+        cardItem.appendChild(cardHeader);
+        cardItem.appendChild(cardBody);
+
+        flightList.appendChild(cardItem);
     });
-  }
+}
+
   
  
   

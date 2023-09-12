@@ -7,6 +7,7 @@ A simple Hotel/Restaurant/Flight search web application built with Beego, HTML, 
 - [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
+- [Technology Used](#technology-used)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -30,21 +31,33 @@ To run this project locally, follow these steps:
 
    ```bash
    git clone https://github.com/AbuHorairaTarif/travel-guide.git
-   Change to the project directory:
+   ```
+2. Change to the project directory:
+   ```bash
+   cd travel-guide
+   ```
+3. Install dependencies:
+   ```bash
+   go mod tidy
+   ```
 
-cd travel-guide
-Install dependencies:
-go mod tidy
+4. Start the Beego server:
+   ```bash
+   bee run
+   ```
+5. Open your web browser and navigate to http://localhost:8080 to access the application.
 
-Start the Beego server:
-bee run
 
-Open your web browser and navigate to http://localhost:8080 to access the application.
+## Technology-Used
+
+- [Beego](https://beego.gocn.vip/beego/en-US/developing/) - A powerful and flexible Go Web framework.
+- [RapidAPI](https://rapidapi.com/) - Provides access to a variety of APIs, including the Booking.com,Tripadvisor API used in this project.
+
 
 ## Usage
 
-1. Choose the **Hotels** or **Restaurants** **Flights** category.
-2. Enter the departure and return locations and dates.
+1. Choose the **Hotels** or **Restaurants** or **Flights** category.
+2. Enter the departure and return locations, dates etc. other parameters
 3. Click the **Search** button.
 4. Search results will be displayed on the page.
 

@@ -139,7 +139,6 @@ func (c *FlightController) Search() {
 
 	// Pass the flight search results to the view
 	c.Data["FlightResults"] = flightResults
-
 	// Render the flight search results view
 	c.TplName = "flights.tpl"
 }
