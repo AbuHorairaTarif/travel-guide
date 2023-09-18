@@ -1,5 +1,8 @@
 body {
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    margin: auto;
 }
 
 header {
@@ -9,7 +12,7 @@ header {
     background-size: cover;
     padding: 20px;
     color: white;
-    height: 30vh;
+    height: 50vh;
 }
 
 .search-box {
@@ -213,4 +216,27 @@ ul.list-unstyled li {
 /* Add a subtle shadow to the cards */
 .card {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+
+.centered-div-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; /* Set a fixed height to center vertically within the viewport */
+    z-index: 11;
+    /* background-color: whitesmoke; */
+}
+
+/* Additional styling for the centered div */
+.centered-div {
+    width: auto;
+    height: 300px;
+    width: 650px;
+    background-color: rgb(248, 248, 199);
+    border: 1px solid #ccc ;
+    text-align: center;
+    line-height: 0; /* Adjust this value to vertically align text */
+    z-index: 0;
+    border-radius: 10px;
 }

@@ -1,144 +1,246 @@
+// package controllers
+
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"io"
+// 	"net/http"
+// 	"travelguide/models"
+
+// 	"github.com/beego/beego/v2/core/logs"
+// 	beego "github.com/beego/beego/v2/server/web"
+// )
+
+// // FlightController handles flight search and API integration.
+// type FlightController struct {
+// 	beego.Controller
+// }
+
+// type Price struct {
+// 	Currency struct {
+// 		Code string `json:"code"`
+// 	} `json:"currency"`
+// 	Value float64 `json:"value"`
+// }
+
+// type SellPriceBaggage struct {
+// 	MaxWeight     int    `json:"maxWeight"`
+// 	NumberOfUnits int    `json:"numberOfUnits"`
+// 	WeightUnit    string `json:"weightUnit"`
+// }
+
+// type SellSpecification struct {
+// 	SellPriceBaggage []SellPriceBaggage `json:"sellPriceBaggage"`
+// }
+
+// type TravelerPrice struct {
+// 	Price struct {
+// 		Price Price `json:"price"`
+// 		VAT   struct {
+// 			Value float64 `json:"value"`
+// 		} `json:"vat"`
+// 	} `json:"price"`
+// }
+
+// type Flight struct {
+// 	AvailableExtraProducts []struct {
+// 		SellSpecification SellSpecification `json:"sellSpecification"`
+// 	} `json:"availableExtraProducts"`
+// 	ID             string          `json:"id"`
+// 	ShareableURL   string          `json:"shareableUrl"`
+// 	TravelerPrices []TravelerPrice `json:"travelerPricesWithoutPaymentDiscounts"`
+// 	Type           string          `json:"type"`
+// }
+
+// type FlightStruct struct {
+// 	CurrentPage  int `json:"currentPage"`
+// 	FlightStruct struct {
+// 		Flights []Flight `json:"flights"`
+// 	} `json:"data"`
+// }
+
+// type FlightInfo struct {
+// 	Id            string
+// 	Url           string
+// 	Price         float64
+// 	Vat           float64
+// 	Currency      string
+// 	MaxWeight     int
+// 	NumberOfUnits int
+// }
+
+// type FlightData struct {
+// 	Origin      string
+// 	Destination string
+// 	Departure   string
+// 	Return      string
+// 	Flights     []FlightInfo
+// }
+
+// type ErrorMessage struct {
+// 	Message    string
+// 	SubMessage string
+// 	Code       int
+// }
+
+// // Search handles flight search and API integration.
+
+// func fetchFlight(apiKey, apiHost, locationFrom, locationTo, departureDate, returnDate string, data models.FlightData) {
+// 	apiURL := fmt.Sprintf("https://%s/flights/return?location_from=%s&location_to=%s&departure_date=%s&return_date=%s&page=1&country_flag=us", apiHost, locationFrom, locationTo, departureDate, returnDate)
+
+// 	req, err := http.NewRequest("GET", apiURL, nil)
+// 	if err != nil {
+// 		logs.Error("Failed to create request: %v", err)
+// 		data.JsonChan <- "" // Send an empty response on error
+// 		return
+// 	}
+
+// 	req.Header.Add("X-RapidAPI-Key", apiKey)
+// 	req.Header.Add("X-RapidAPI-Host", apiHost)
+
+// 	res, err := http.DefaultClient.Do(req)
+// 	if err != nil {
+// 		logs.Error("Failed to make request: %v", err)
+// 		data.JsonChan <- "Failed to make request " // Send an empty response on error
+// 		return
+// 	}
+// 	defer res.Body.Close()
+
+// 	if res.StatusCode != http.StatusOK {
+// 		logs.Error("Received non-OK status code: %d", res.StatusCode)
+// 		data.JsonChan <- "Received non-OK status code" // Send an empty response on error
+// 		return
+// 	}
+
+// 	body, err := io.ReadAll(res.Body)
+// 	if err != nil {
+// 		logs.Error("Error reading response body: %v", err)
+// 		data.JsonChan <- "Error reading response body" // Send an empty response on error
+// 		return
+// 	}
+// 	data.JsonChan <- string(body) // Send the JSON response to the channel
+// }
+
+// func (c *FlightController) Get() {
+// 	apiKey, _ := beego.AppConfig.String("X-RapidAPI-Key")
+// 	apiHost, _ := beego.AppConfig.String("X-RapidAPI-Host")
+
+// 	// Parse request parameters, e.g., locationFrom, locationTo, departureDate, returnDate
+// 	locationFrom := c.GetString("locationFrom")
+// 	locationTo := c.GetString("locationTo")
+// 	departureDate := c.GetString("departureDate")
+// 	returnDate := c.GetString("returnDate")
+
+// 	if locationFrom != "" && locationTo != "" && departureDate != "" && returnDate != "" {
+// 		data := models.FlightStruct{}
+// 		// Call fetchFlight with the required arguments
+// 		jsonChan := make(chan string)
+// 		flightData := models.FlightData{}
+// 		flightData.Origin = locationFrom
+// 		flightData.Destination = locationTo
+// 		flightData.Departure = departureDate
+// 		flightData.Return = returnDate
+// 		flightData.Flights = []models.FlightInfo{}
+// 		// flightData.JsonChan = jsonChan
+
+// 		// Pass the individual string parameters to fetchFlight using goroutine
+// 		go fetchFlight(apiKey, apiHost, locationFrom, locationTo, departureDate, returnDate, flightData)
+
+// 		jsonString := <-jsonChan
+
+// 		err := json.Unmarshal([]byte(jsonString), &data)
+// 		if err != nil {
+// 			fmt.Println("Error unmarshaling JSON:", err)
+// 		}
+// 		c.Data["json"] = &data
+
+// 	}
+// 	c.ServeJSON()
+// }
+
 package controllers
 
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"travelguide/models"
 
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/v2/server/web"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
-// FlightController handles flight search and API integration.
 type FlightController struct {
-	web.Controller
+	beego.Controller
 }
 
-// Define structs to match the new JSON response structure
-type TripSegment struct {
-	AircraftType         string `json:"aircraftType"`
-	ArrivedAt            string `json:"arrivedAt"`
-	CabinClassName       string `json:"cabinClassName"`
-	DeparturedAt         string `json:"departuredAt"`
-	Destination          Region `json:"destination"`
-	Duration             int    `json:"duration"`
-	EquipmentCode        string `json:"equipmentCode"`
-	FlightNumber         string `json:"flightNumber"`
-	IncludedCabinBaggage struct {
-		Pieces     int    `json:"pieces"`
-		Weight     int    `json:"weight"`
-		WeightUnit string `json:"weightUnit"`
-	} `json:"includedCabinBaggage"`
-	IncludedCheckedBaggage interface{} `json:"includedCheckedBaggage"`
-	MarketingCarrier       Carrier     `json:"marketingCarrier"`
-	NumberOfTechnicalStops int         `json:"numberOfTechnicalStops"`
-	OperatingCarrier       Carrier     `json:"operatingCarrier"`
-	OperatingInformation   string      `json:"operatingInformation"`
-	Origin                 Region      `json:"origin"`
-	SegmentDetails         []struct {
-		NumberOfSeatsLeft int    `json:"numberOfSeatsLeft"`
-		PaxType           string `json:"paxType"`
-	} `json:"segmentDetails"`
-	SegmentId string `json:"segmentId"`
-}
+func (c *FlightController) Get() {
+	source := c.GetString("location_from")
+	c.Data["location_from"] = source
+	destination := c.GetString("location_to")
+	c.Data["location_to"] = destination
+	departure_date := c.GetString("departure_date")
+	c.Data["departure_date"] = departure_date
+	return_date := c.GetString("return_date")
+	c.Data["return_date"] = return_date
 
-type Region struct {
-	CityCode string `json:"cityCode"`
-	CityName string `json:"cityName"`
-	Code     string `json:"code"`
-	Name     string `json:"name"`
-}
+	if source == "" || destination == "" || departure_date == "" || return_date == "" {
+		c.Data["Error"] = "Please Fill the all Required Field"
+		c.Redirect("/", 302)
+		return
+	}
 
-type Carrier struct {
-	Code string `json:"code"`
-	Name string `json:"name"`
-}
+	url := "https://booking-com13.p.rapidapi.com/flights/return" +
+		"?location_from=" + source +
+		"&location_to=" + destination +
+		"&departure_date=" + departure_date +
+		"&return_date=" + return_date +
+		"&page=1&country_flag=us"
 
-type FlightResponse struct {
-	CurrentPage          int           `json:"currentPage"`
-	Data                 Data          `json:"data"`
-	FilteredFlightsCount int           `json:"filteredFlightsCount"`
-	Flights              []TripSegment `json:"flights"`
-	ID                   string        `json:"id"`
-	IncludedCabinBaggage struct {
-		Pieces     int    `json:"pieces"`
-		Weight     int    `json:"weight"`
-		WeightUnit string `json:"weightUnit"`
-	} `json:"includedCabinBaggage"`
-	IncludedCheckedBaggage interface{}   `json:"includedCheckedBaggage"`
-	IncludedExtraProducts  []interface{} `json:"includedExtraProducts"`
-	IsVI                   bool          `json:"isVI"`
-	PaymentMethodPrices    []struct {
-		Name  string `json:"name"`
-		Price struct {
-			Value int `json:"value"`
-		} `json:"price"`
-		Type string `json:"type"`
-	} `json:"paymentMethodPrices"`
-}
+	fmt.Println(url)
 
-type Data struct {
-	Type               string        `json:"__typename"`
-	AvailableFilters   []interface{} `json:"availableFilters"`
-	AvailableSortTypes []struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	} `json:"availableSortTypes"`
-	CarrierCodes []interface{} `json:"carrierCodes"`
-	CarrierNames []interface{} `json:"carrierNames"`
-}
-
-// Search handles flight search and API integration.
-func (c *FlightController) Search() {
-	// Parse request parameters, e.g., locationFrom, locationTo, departureDate, returnDate
-	locationFrom := c.GetString("locationFrom")
-	locationTo := c.GetString("locationTo")
-	departureDate := c.GetString("departureDate")
-	returnDate := c.GetString("returnDate")
-
-	// Define the flight API URL
-	apiURL := fmt.Sprintf("https://booking-com13.p.rapidapi.com/flights/return?location_from=%s&location_to=%s&departure_date=%s&return_date=%s&page=1&country_flag=us", locationFrom, locationTo, departureDate, returnDate)
-
-	// Create an HTTP GET request
-	req, err := http.NewRequest("GET", apiURL, nil)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		logs.Error("Failed to create request: %v", err)
-		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
+		c.Data["Error"] = "Error creating request"
 		return
 	}
 
-	// Add headers to the request
-	req.Header.Set("X-RapidAPI-Key", "16e4aeb170mshafe993eedee5cdep154eb3jsn8d818903b1df")
-	req.Header.Set("X-RapidAPI-Host", "booking-com13.p.rapidapi.com")
+	req.Header.Add("X-RapidAPI-Key", "16e4aeb170mshafe993eedee5cdep154eb3jsn8d818903b1df")
+	req.Header.Add("X-RapidAPI-Host", "booking-com13.p.rapidapi.com")
 
-	// Send the HTTP request
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		logs.Error("Failed to make request: %v", err)
-		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
-		return
-	}
-	defer resp.Body.Close()
+	flightDataChan := make(chan models.FlightData)
 
-	// Check the response status code
-	if resp.StatusCode != http.StatusOK {
-		logs.Error("Received non-OK status code: %d", resp.StatusCode)
-		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
-		return
-	}
+	go func() {
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			c.Data["Error"] = "Error making the request"
+			flightDataChan <- models.FlightData{}
+			return
+		}
 
-	// Parse the JSON response from the flight API
-	var flightResults FlightResponse
-	decoder := json.NewDecoder(resp.Body)
-	if err := decoder.Decode(&flightResults); err != nil {
-		logs.Error("Failed to parse JSON response: %v", err)
-		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
-		return
-	}
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			c.Data["Error"] = "Error reading the response"
+			flightDataChan <- models.FlightData{}
+			return
+		}
 
-	// Pass the flight search results to the view
-	c.Data["FlightResults"] = flightResults
-	// Render the flight search results view
+		var allFlights models.FlightData
+		if err = json.Unmarshal(body, &allFlights); err != nil {
+			c.Data["Error"] = "Error parsing JSON response"
+			flightDataChan <- models.FlightData{}
+			return
+		}
+
+		flightDataChan <- allFlights
+	}()
+
+	extractedData := <-flightDataChan
+	c.Data["Flights"] = extractedData.Data
+
+	fmt.Println("Total flights", extractedData.Data.FilteredFlightsCount)
+	c.Data["Length"] = len(extractedData.Data.Flights)
+
 	c.TplName = "flights.tpl"
 }

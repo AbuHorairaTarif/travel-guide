@@ -14,6 +14,7 @@ func init() {
 	beego.Router("/search/hotel", &controllers.HotelController{}, "get:Get")
 	beego.Router("/searchRestaurants", &controllers.RestaurantSearchController{})
 	// beego.Router("/flights", &controllers.FlightController{}, "get:Index")
-	beego.Router("/flights/return", &controllers.FlightController{}, "get:Search")
+	// beego.Router("/flights/return", &controllers.FlightController{}, "get:SearchFlights")
+	beego.Router("/flights/return", &controllers.FlightController{}, "get:Get")
 
 }
